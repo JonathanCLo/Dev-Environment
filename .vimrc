@@ -49,6 +49,8 @@ nmap <leader>w :w!<cr>
 " sudo saves
 command W w !sudo tee % > /dev/null
 
+"   enable mouse control
+set mouse=a
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -279,7 +281,4 @@ function! VisualSelection(direction, extra_filter) range
 	let @/ = l:pattern
 	let @" = l:saved_reg
 endfunction
-
-"   enable mouse control
-set mouse=v
 
