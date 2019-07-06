@@ -88,7 +88,7 @@ highlight LineNr ctermfg=grey
 
 
 "   add a column to represent page width
-set colorcolumn=100
+set colorcolumn=80
 
 "   enable syntax highlighting
 syntax enable
