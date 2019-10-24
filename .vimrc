@@ -76,7 +76,7 @@ command W w !sudo tee % > /dev/null
 
 " colorscheme slate                              " set the colorscheme
 set ruler                                       " enable ruler in status menu
-set numbers                                     " enable line numbers
+set number                                      " enable line numbers
 highlight LineNr ctermfg=DaryGray               " reset line number colour to dark gray.
 set scrolloff=10                                " ensure window will scroll to display 10 lines around current line
 set cursorline                                  " enable current line indicator
