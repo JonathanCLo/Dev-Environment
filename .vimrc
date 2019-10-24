@@ -1,43 +1,61 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   
-"   Filename:       .vimrc
-"   Description:    VIM Configuration
-"   Author:         Jonathan Lo
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"   
-"   Table of Contents:
-"
-"       ->  General
-"       ->  UI
-"       ->  Colors and fonts
-"       ->  Files and backups
-"       ->  Text, tab, indentations
-"       ->  Visual Mode
-"       ->  Hotkeys
-"       ->  Status Line
-"       ->  Helper Funcs
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  Filename:       .vimrc
+"|  Description:    VIM Configuration
+"|  Author:         Jonathan Lo
+"|  Date Created:   
+"|  Date Modified:  2019-10-24
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  Table of Contents:
+"|
+"|      ->  General
+"|      ->  UI
+"|      ->  Colors and fonts
+"|      ->  Files and backups
+"|      ->  Text, tab, indentations
+"|      ->  Visual Mode
+"|      ->  Hotkeys
+"|      ->  Status Line
+"|      ->  Helper Funcs
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  General
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  General
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"   Sets how many lines of history
-set history=500
+set hidden                                      " Sets how many lines of history
+set modeline                                    " enabled file-specific settings
+set secure                                      " disable unsafe commands for vimrc
+set ignorecase smartcase hlsearch incsearch     " better search
+set wildmenu                                    " enable wild menu
+set wildmode=list:longest,full                  " custom wild menu tab completion
+set wildignore=*.o,*~,*.pyc                     " ignore these files with auto completing
+set backspace=indent,eol,start                  " sane backspace
+set whichwrap+=<,>,h,l
+set clipboard+=unnamed,unnamedplus              " combined usage of system clipboard
+set mouse=a                                     " enabled mouse
+set ttymouse=xterm2                             " enabled mouse for cygwin
+set nomousehide                                 " disable mouse hiding during typing
+set mousemodel=popup                            " enable context menu, for gvim
+set history=500                                 " command history
+set shell=bash
+set nocompatible                                " enable VIM Enhanced
+set lazyredraw                                  " dont redraw for macros
+set magic                                       " regular expressions, are magical
+set showmatch mat=1                             " show matching backets
+set noerrorbells novisualbell                   " quiet vim
+set t_vb=
+set tm=500
+set foldcolumn=1                                " add one extra margin on the left
 
 "   Enable filetype plugins
 filetype plugin on
 filetype indent on
-
-"   enable VIM Enhanced
-set nocompatible
-
-"   auto read file if updated
-set autoread
 
 "   set map leader for custom hotkeys
 let mapleader=";"
@@ -49,125 +67,63 @@ nmap <leader>w :w!<cr>
 " sudo saves
 command W w !sudo tee % > /dev/null
 
-"   enable mouse control
-set mouse=a
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  UI
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  UI
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"   set the colorscheme
-colorscheme slate
-
-"   enable wild menu
-set wildmenu
-
-"   custom wild menu tab completion
-set wildmode=list:longest,full
-
-"   ignore these files with auto completing
-set wildignore=*.o,*~,*.pyc
-
-"   enable ruler
-set ruler
-
-"   enable current line highlighting
-set cursorline
-
-"   set the command bar height
-set cmdheight=2
-
-"   hide buffer when abandoned
-set hid
-
-"   enable line numbers
-set number
-
-"   alter the color of the line nr from default
-highlight LineNr ctermfg=grey
+" colorscheme slate                              " set the colorscheme
+set ruler                                       " enable ruler in status menu
+set numbers                                     " enable line numbers
+highlight LineNr ctermfg=DaryGray               " reset line number colour to dark gray.
+set scrolloff=10                                " ensure window will scroll to display 10 lines around current line
+set cursorline                                  " enable current line indicator
+set textwidth=80                                " sane page width
+set colorcolumn=81                              " end column indicator
+let &colorcolumn=join(range(81,999),",")        " highlight everything past column 80
+highlight ColorColumn ctermbg=LightGray
+set printoptions=paper:letter                   " printer settings
+set laststatus=2                                " show two lines
+set statusline=\ %{HasPaste()}%f%m%r%h\ %w\ \ CWD"\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+                                                " custom status line
+set cmdheight=2                                 " set the command bar height
+syntax enable                                   " syntax enabled
 
 
-"   add a column to represent page width
-set colorcolumn=80
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  => Files and backups 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"   enable syntax highlighting
-syntax enable
+set nobackup nowritebackup noswapfile autoread          " disable all auto swap files, backups enabled autoreading
 
-"   return backspace to normal operation
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  => Text, tabs, and indentations 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set shiftwidth=4 tabstop=4 softtabstop=4 expandtab smarttab
+                                                " correct tabs
+set lbr tw=500                                  " enable line breaks
 
-"   searching tuning.
-set ignorecase
-set smartcase
-set hlsearch
-set incsearch
-
-"   dont redraw while executing macros
-set lazyredraw
-
-"   for regular expressions
-set magic
-
-"   show matching brackets [ sadsad  ]
-set showmatch
-set mat=1
-
-"   disable sounds
-set noerrorbells
-set novisualbell
-set t_vb=
-set tm=500
-
-"   add one extra margin on the left
-set foldcolumn=1
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   => Files and backups 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"   disable all auto swap files, backups.
-set nobackup
-set nowb
-set noswapfile
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   => Text, tabs, and indentations 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-"   enable nice tabs
-set expandtab
-set smarttab
-
-"   4 space tabs
-set shiftwidth=4
-set tabstop=4
-
-"   force line breaks
-set lbr
-set tw=500
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  Visual Mode 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  Visual Mode 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "   helpful quick searching on selection
 vnoremap <silent> * :<C-u>call VisualSelection('', '')<CR>/<C-R>=@<CR><CR>
 vnoremap <silent> # :<C-u>call VisualSelection('', '')<CR>/<C-R>=@<CR><CR>
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  Hotkeys 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  Hotkeys 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "   quick map for searchings
 map <space> /
@@ -204,11 +160,11 @@ nmap <M-k> mz:m-2<cr>`z
 nmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 nmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  Status Line 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  Status Line 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "   always show status line
 set laststatus=2
@@ -216,69 +172,68 @@ set laststatus=2
 "   format status line
 set statusline=\ %{HasPaste()}%f%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-"   =>  Helper Funcs 
-"
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"|
+"|  =>  Helper Funcs 
+"|
+"|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 fun! CleanExtraSpaces()
-	let save_cursor = getpos(".")
-	let old_query = getreg('/')
-	silent! %s/\s\+$//e
-	call setpos('.', save_cursor)
-	call setreg("/", old_query)
+    let save_cursor = getpos(".")
+    let old_query = getreg('/')
+    silent! %s/\s\+$//e
+    call setpos('.', save_cursor)
+    call setreg("/", old_query)
 endfun
 
 if has("autocmd")
-	autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.c,*.cpp,*.s :call CleanExtraSpaces()
+    autocmd BufWritePre *.txt,*.js,*.py,*.wiki,*.sh,*.coffee,*.c,*.cpp,*.s :call CleanExtraSpaces()
 endif
 
 map <leader>ss :setlocal spell!<cr>
 
 function! HasPaste()
-	if &paste
-		return 'PASTE MODE '
-	endif
-	return ''
+    if &paste
+        return 'PASTE MODE '
+    endif
+    return ''
 endfunction
 
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
-	let l:currentBufNum = bufnr("%")
-	let l:alternateBufNum = bufnr("#")
+    let l:currentBufNum = bufnr("%")
+    let l:alternateBufNum = bufnr("#")
 
-	if buflisted(l:alternateBufNum)
-		buffer #
-	else
-		bnext
-	endif
+    if buflisted(l:alternateBufNum)
+        buffer #
+    else
+        bnext
+    endif
 
-	if buflisted(l:currentBufNum)
-		execute("bdelete! ".l:currentBufNum)
-	endif
+    if buflisted(l:currentBufNum)
+        execute("bdelete! ".l:currentBufNum)
+    endif
 endfunction
 
 function! CmdLine(str)
-	exe "menu Foo.Bar :" . a:str
-	emenu Foo.Bar
-	unmenu Foo
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
 endfunction
 
 function! VisualSelection(direction, extra_filter) range
-	let l:saved_reg =@"
-	execute "normal! vgvy"
-	
-	let l:pattern = escape(@", "\\/.*'$^~[]")
-	let l:pattern = substitute(l:pattern, "\n$", "", "")
-	
-	if a:direction == 'gv'
-		call CmdLine ("Ack '" . l:pattern . "' " )
-	elseif a:direction == 'replace'
-		call CmdLine ("%s". '/'. l:pattern . '/')
-	endif
+    let l:saved_reg =@"
+    execute "normal! vgvy"
+    
+    let l:pattern = escape(@", "\\/.*'$^~[]")
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+    
+    if a:direction == 'gv'
+        call CmdLine ("Ack '" . l:pattern . "' " )
+    elseif a:direction == 'replace'
+        call CmdLine ("%s". '/'. l:pattern . '/')
+    endif
 
-	let @/ = l:pattern
-	let @" = l:saved_reg
+    let @/ = l:pattern
+    let @" = l:saved_reg
 endfunction
-
