@@ -177,7 +177,7 @@ highlight User1 ctermfg=White ctermbg=Black     " white fg and black bg
 set statusline+=%2*\ [%n]\                      " buffer size
 highlight User2 ctermfg=Black ctermbg=LightGray " white fg and lightgray bg
 
-set statusline+=%3*\ [%m][%r]%y%h%w[%{&ff}][%{&spelllang}]\ 
+set statusline+=%3*\ %m%r%y%h%w[%{&ff}][%{&spelllang}]\ 
                                                 " file information
 highlight User3 ctermfg=Black ctermbg=LightGray " black fg and lightgray bg
 
