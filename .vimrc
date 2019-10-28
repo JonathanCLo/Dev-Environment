@@ -4,7 +4,7 @@
 "|  Description:    VIM Configuration
 "|  Author:         Jonathan Lo
 "|  Date Created:   
-"|  Date Modified:  2019-10-24
+"|  Date Modified:  2019-10-27
 "|
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "|
@@ -29,7 +29,8 @@
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 set hidden                                      " Sets how many lines of history
-set modeline                                    " enabled file-specific settings
+set nomodeline                                  " disable file-specific settings
+set modelines=0                 " double assurance of disabling
 set secure                                      " disable unsafe commands for vimrc
 set ignorecase smartcase hlsearch incsearch     " better search
 set wildmenu                                    " enable wild menu
@@ -53,6 +54,7 @@ set t_vb=
 set tm=500
 set foldcolumn=1                                " add one extra margin on the left
 
+
 "   Enable filetype plugins
 filetype plugin on
 filetype indent on
@@ -75,22 +77,19 @@ command W w !sudo tee % > /dev/null
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " colorscheme slate                              " set the colorscheme
-set ruler                                       " enable ruler in status menu
+" set ruler                                       " enable ruler in status menu
 set number                                      " enable line numbers
 highlight LineNr ctermfg=DaryGray               " reset line number colour to dark gray.
-set scrolloff=10                                " ensure window will scroll to display 10 lines around current line
+set scrolloff=999                               " ensure cursor is centered in window
 set cursorline                                  " enable current line indicator
 set textwidth=80                                " sane page width
 set colorcolumn=81                              " end column indicator
 let &colorcolumn=join(range(81,999),",")        " highlight everything past column 80
 highlight ColorColumn ctermbg=LightGray
 set printoptions=paper:letter                   " printer settings
-set laststatus=2                                " show two lines
-set statusline=\ %{HasPaste()}%f%m%r%h\ %w\ \ CWD"\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
-                                                " custom status line
-set cmdheight=2                                 " set the command bar height
-syntax enable                                   " syntax enabled
 
+set cmdheight=1                                 " set the command bar height
+syntax enable                                   " syntax enabled
 
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "|
@@ -98,7 +97,7 @@ syntax enable                                   " syntax enabled
 "|
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-set nobackup nowritebackup noswapfile autoread          " disable all auto swap files, backups enabled autoreading
+set nobackup nowritebackup noswapfile autoread  " disable all auto swap files, backups enabled autoreading
 
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "|
@@ -166,12 +165,61 @@ nmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 "|
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-"   always show status line
-set laststatus=2
+set laststatus=2                                " always show status line
+set statusline=                                 " clear statusline
 
-"   format status line
-set statusline=\ %{HasPaste()}%f%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+set statusline+=%0*\ %{GetMode()}\              " display vim mode\
+highlight User0 ctermfg=White ctermbg=DarkGray  " white fg and darkgray bg
 
+set statusline+=%1*\ %<%F\                      " path + name
+highlight User1 ctermfg=White ctermbg=Black     " white fg and black bg
+
+set statusline+=%2*\ [%n]\                      " buffer size
+highlight User2 ctermfg=Black ctermbg=LightGray " white fg and lightgray bg
+
+set statusline+=%3*\ [%m][%r]%y%h%w[%{&ff}][%{&spelllang}]\ 
+                                                " file information
+highlight User3 ctermfg=Black ctermbg=LightGray " black fg and lightgray bg
+
+set statusline+=%4*\ [%{HighlightSearch()}]\    " highlight search indicator
+highlight User4 ctermfg=Black ctermbg=LightGray " black fg and black bg
+
+set statusline+=%5*\ \                          " 
+highlight User5 ctermfg=White ctermbg=Black     " white fg and black bg
+
+set statusline+=%6*\ \                          "
+highlight User6 ctermfg=White ctermbg=Black     " white fg and black bg
+
+set statusline+=%7*\ \                          "
+highlight User7 ctermfg=White ctermbg=Black     " white fg and black bg
+
+set statusline+=%8*\ \                          "
+highlight User8 ctermfg=White ctermbg=Black     " white fg and black bg
+
+set statusline+=%9*\ %=\ LN\ %l/%L,\ COL\ %03c\ " position
+highlight User9 ctermfg=White ctermbg=Black     " white fg and black bg
+
+function! HighlightSearch()
+    if &hls
+        return 'H'
+    else
+        return ''
+    endif
+endfunction
+
+function! GetMode()
+    if (mode() =~# '\v(v|V|<C-V>)')
+        return 'VISUAL'
+    elseif (mode() =~# '\v(i)')
+        return 'INSERT'
+    elseif (mode() =~# '\v(R)')
+        return 'REPLACE'
+    elseif (mode() =~# '\v(s|S)')
+        return 'SELECT'
+    else
+        return 'COMMAND'
+    endif
+endfunction
 "|""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "|
 "|  =>  Helper Funcs 
