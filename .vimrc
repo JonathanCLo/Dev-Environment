@@ -1,3 +1,4 @@
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "   Filename:       .vimrc
 "   Description:    VIM Configuration
@@ -124,7 +125,11 @@ set tm=500
 
 "   display whitespace characters
 set showbreak=↪\
-set list listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:•
+"set list listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨,space:•
+set list listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
+
+"   enable mouse control
+set mouse=a
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -132,13 +137,15 @@ set list listchars=tab:→\ ,eol:↲,nbsp:␣,trail:•,extends:⟩,precedes:⟨
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 "   Line Number
-highlight LineNr      term=bold     ctermfg=Grey
+highlight   LineNr      term=bold     ctermfg=Grey
 
-highlight Comment     term=bold     ctermfg=LightGray
-highlight SpecialKey                ctermfg=DarkGray
-highlight NonText                   ctermfg=DarkGray
-highlight Search      term=reverse  ctermfg=White     ctermbg=Magenta
-highlight IncSearch   term=reverse  ctermfg=Black     ctermbg=Green
+highlight   Comment     term=bold     ctermfg=LightGray
+highlight   SpecialKey                ctermfg=DarkGray
+highlight   NonText                   ctermfg=DarkGray
+highlight   Search      term=reverse  ctermfg=White     ctermbg=Magenta
+highlight   IncSearch   term=reverse  ctermfg=Black     ctermbg=Green
+
+highlight!  StatusLineNC              ctermfg=gray      ctermbg=darkgray
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
@@ -236,18 +243,35 @@ nnoremap <CR> :noh<CR><CR>
 "   always show status line
 set laststatus=2
 
-python3 from powerline.vim import setup as powerline_setup
-python3 powerline_setup()
-python3 del powerline_setup
+"python3 from powerline.vim import setup as powerline_setup
+"python3 powerline_setup()
+"python3 del powerline_setup
 
 "   format status line
-" set statusline=\ %{HasPaste()}%f%m\ %r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l\ \ Column:\ %c
+"   Set colors
+highlight User1   cterm=bold ctermfg=black   ctermbg=cyan
+highlight User2   cterm=bold ctermfg=black   ctermbg=magenta
+"
+set statusline=%1*\ %f%m\ %r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ %2*\ Line:\ %l\ \ Column:\ %c
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "
 "   =>  Helper Funcs 
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup NetrwInactiveStatusline
+  autocmd!
+  autocmd FileType netrw setlocal statusline=%#StatusLineNC#📁\ Explorer\ \|\ %f\ \|\ %l
+augroup END
+
+function! FixStatusLine()
+  highlight StatusLineNC ctermfg=gray ctermbg=black 
+endfunction
+
+augroup StatusLineFix
+  autocmd!
+  autocmd VimEnter,ColorScheme * call FixStatusLine()
+augroup END
 
 fun! CleanExtraSpaces()
 	let save_cursor = getpos(".")
@@ -262,13 +286,6 @@ if has("autocmd")
 endif
 
 map <leader>ss :setlocal spell!<cr>
-
-function! HasPaste()
-	if &paste
-		return 'PASTE MODE '
-	endif
-	return ''
-endfunction
 
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
@@ -308,7 +325,4 @@ function! VisualSelection(direction, extra_filter) range
 	let @/ = l:pattern
 	let @" = l:saved_reg
 endfunction
-
-"   enable mouse control
-set mouse=a
 
